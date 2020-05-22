@@ -7,6 +7,8 @@ import com.epam.ticketservice.models.Ticket;
 import com.epam.ticketservice.services.TicketsService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -24,15 +26,15 @@ public class TasksController {
 
 
     @PostMapping(path = "/")
-    Task addTask(@Valid @RequestBody TaskRequest taskRequest)throws TicketException
+    ResponseEntity<?> addTask(@Valid @RequestBody TaskRequest taskRequest)throws TicketException
     {
-        return ticketsService.addTask(modelMapper.map(taskRequest,Task.class));
+        return  new ResponseEntity<>(ticketsService.addTask(modelMapper.map(taskRequest,Task.class)),HttpStatus.CREATED);
     }
 
     @GetMapping(path = "/{id}")
-    List<Task> getAllTasks(@PathVariable("id") int id)throws TicketException
+    ResponseEntity<?>  getAllTasks(@PathVariable("id") int id)throws TicketException
     {
-        return ticketsService.getAllTasks(id);
+        return  new ResponseEntity<>(ticketsService.getAllTasks(id), HttpStatus.OK);
     }
     
 }

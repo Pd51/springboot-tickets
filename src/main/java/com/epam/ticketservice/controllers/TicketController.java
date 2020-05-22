@@ -6,6 +6,8 @@ import com.epam.ticketservice.models.Ticket;
 import com.epam.ticketservice.services.TicketsService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
@@ -21,20 +23,20 @@ public class TicketController {
     ModelMapper modelMapper;
 
     @GetMapping(path = "/{id}")
-    Ticket getTicket(@PathVariable("id") int id) throws TicketException
+    ResponseEntity<?> getTicket(@PathVariable("id") int id) throws TicketException
     {
-        return ticketsService.getTicket(id);
+      return  new ResponseEntity<>(ticketsService.getTicket(id),HttpStatus.OK);
     }
     @PostMapping(path = "/")
-    Ticket addTicket(@Valid @RequestBody TicketRequest ticketRequest) throws TicketException
+    ResponseEntity<?> addTicket(@Valid @RequestBody TicketRequest ticketRequest) throws TicketException
     {
-        return ticketsService.addTicket(modelMapper.map(ticketRequest,Ticket.class));
+        return new ResponseEntity<>(ticketsService.addTicket(modelMapper.map(ticketRequest,Ticket.class)),HttpStatus.CREATED);
     }
 
     @GetMapping(path = "/")
-    List<Ticket> getAllTickets()
+    ResponseEntity<?>  getAllTickets()
     {
-        return ticketsService.getAllTickets();
+        return  new ResponseEntity<>(ticketsService.getAllTickets(),HttpStatus.OK);
     }
 
 
